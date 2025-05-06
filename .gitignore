@@ -1,0 +1,10 @@
+.env
+!.env.example
+
+.DS_Store
+/node_modules/
+/react-email-starter/node_modules/
+
+# React Router
+/.react-router/
+/build/
