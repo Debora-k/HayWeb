@@ -30,6 +30,7 @@ export default function LoginPage() {
         <Button type="submit" className="w-full">
           Login
         </Button>
+        <Button>Sign Up</Button>
         <AuthButtons />
       </Form>
     </div>

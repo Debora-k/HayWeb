@@ -14,12 +14,28 @@ export default function DeliveryPage() {
       <div>
         <Form className="w-full max-w-sm space-y-5" method="post">
           <InputPair
+            id="name"
+            label="Name"
+            description="Enter your full name"
+            name="name"
+            required
+            type="name"
+          />
+          <InputPair
             id="address"
             label="Address"
             description="Enter your address"
             name="address"
             required
             type="address"
+          />
+          <InputPair
+            id="postal"
+            label="Postal"
+            description="Enter your postal code"
+            name="postal"
+            required
+            type="postal"
           />
           <Button type="submit" className="w-full">
             Confirm Delivery
