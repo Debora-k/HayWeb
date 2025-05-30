@@ -11,6 +11,9 @@ export default [
     ...prefix("/login", [
         index("login/login-page.tsx"),
     ]),
+    ...prefix("/logout", [
+        index("logout/logout-page.tsx"),
+    ]),
     ...prefix("/delivery", [
         index("delivery/delivery-page.tsx"),
     ]),
