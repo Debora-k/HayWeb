@@ -1,5 +1,10 @@
 const navigation = [
   {
+    name: "Items",
+    to: "/items",
+    items: [],
+  }
+  {
     name: "Stocks",
     to: "/stocks",
     items: [],
@@ -27,4 +32,10 @@ const navigation = [
   },
 ];
 
-export default function AdminNavigation() {}
+export default function AdminNavigation() {
+  return (
+    <div>
+      
+    </div>
+  );
+}
