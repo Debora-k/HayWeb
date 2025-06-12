@@ -1,9 +1,10 @@
 import { Button } from "~/common/components/ui/button";
-import { Form, Link } from "react-router";
+import { Form, Link, useNavigation } from "react-router";
 import InputPair from "~/common/components/input-pair";
 import AuthButtons from "~/common/components/auth-button";
 import type { Route } from "./+types/login-page";
 import { z } from "zod";
+import { LoaderCircle } from "lucide-react";
 
 const formSchema = z.object({
   email: z
@@ -33,7 +34,10 @@ export const action = async ({ request }: Route.ActionArgs) => {
   }
 };
 
-export default function LoginPage() {
+export default function LoginPage({ actionData }: Route.ComponentProps) {
+  const navigation = useNavigation();
+  const isSubmitting =
+    navigation.state === "submitting" || navigation.state === "loading";
   return (
     <div className="flex items-center flex-col justify-center w-full gap-10">
       <Button variant={"outline"} asChild className="absolute top-10 right-8">
@@ -57,9 +61,12 @@ export default function LoginPage() {
           required
           type="password"
         />
-        <Button type="submit" className="w-full">
-          Login
+        <Button type="submit" className="w-full" disabled={isSubmitting}>
+          {isSubmitting ? <LoaderCircle className="animate-spin" /> : "Login"}
         </Button>
+        {actionData && "loginError" in actionData && (
+          <p className="text-red-500">{actionData.loginError}</p>
+        )}
         <Button>Sign Up</Button>
         <AuthButtons />
       </Form>
