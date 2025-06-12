@@ -2,6 +2,7 @@ import { Button } from "~/common/components/ui/button";
 import { Form, Link } from "react-router";
 import InputPair from "~/common/components/input-pair";
 import AuthButtons from "~/common/components/auth-button";
+import type { Route } from "./+types/login-page";
 import { z } from "zod";
 
 const formSchema = z.object({
@@ -18,6 +19,19 @@ const formSchema = z.object({
     })
     .min(8, "Password must be at least 8 characters long"),
 });
+
+export const action = async ({ request }: Route.ActionArgs) => {
+  const formData = await request.formData();
+  const { success, data, error } = formSchema.safeParse(
+    Object.fromEntries(formData)
+  );
+  if (!success) {
+    return {
+      loginError: null,
+      formErrors: error.flatten().fieldErrors,
+    };
+  }
+};
 
 export default function LoginPage() {
   return (
