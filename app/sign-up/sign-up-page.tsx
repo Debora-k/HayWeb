@@ -1,8 +1,10 @@
-import { Form, Link } from "react-router";
+import { Form, Link, redirect } from "react-router";
 import { Button } from "~/common/components/ui/button";
 import { z } from "zod";
 import InputPair from "~/common/components/input-pair";
 import AuthButtons from "~/common/components/auth-button";
+import type { Route } from "./+types/sign-up-page";
+import { makeSSRClient } from "~/supa-client";
 
 const formSchema = z.object({
   name: z.string().min(3),
@@ -10,6 +12,43 @@ const formSchema = z.object({
   email: z.string().email(),
   password: z.string().min(5),
 });
+
+export const action = async ({ request }: Route.ActionArgs) => {
+  const formData = await request.formData();
+  const { success, data, error } = formSchema.safeParse(
+    Object.fromEntries(formData)
+  );
+  if (!success) {
+    return {
+      formErrors: error.flatten().fieldErrors,
+    };
+  }
+  // const usernameExists = await checkUsernameExists(request, {
+  //   username: data.username,
+  // });
+  // if (usernameExists) {
+  //   return {
+  //     formErrors: { username: ["Username already exists"] },
+  //   };
+  // }
+  const { client, headers } = makeSSRClient(request);
+  const { error: signUpError } = await client.auth.signUp({
+    email: data.email,
+    password: data.password,
+    options: {
+      data: {
+        name: data.name,
+        username: data.username,
+      },
+    },
+  });
+  if (signUpError) {
+    return {
+      signUpError: signUpError.message,
+    };
+  }
+  return redirect("/", { headers });
+};
 
 export default function SignUpPage() {
   return (
