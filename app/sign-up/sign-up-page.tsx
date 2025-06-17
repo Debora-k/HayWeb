@@ -23,14 +23,14 @@ export const action = async ({ request }: Route.ActionArgs) => {
       formErrors: error.flatten().fieldErrors,
     };
   }
-  // const usernameExists = await checkUsernameExists(request, {
-  //   username: data.username,
-  // });
-  // if (usernameExists) {
-  //   return {
-  //     formErrors: { username: ["Username already exists"] },
-  //   };
-  // }
+  const usernameExists = await checkUsernameExists(request, {
+    username: data.username,
+  });
+  if (usernameExists) {
+    return {
+      formErrors: { username: ["Username already exists"] },
+    };
+  }
   const { client, headers } = makeSSRClient(request);
   const { error: signUpError } = await client.auth.signUp({
     email: data.email,
