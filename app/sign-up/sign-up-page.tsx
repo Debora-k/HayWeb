@@ -5,6 +5,7 @@ import InputPair from "~/common/components/input-pair";
 import AuthButtons from "~/common/components/auth-button";
 import type { Route } from "./+types/sign-up-page";
 import { makeSSRClient } from "~/supa-client";
+import { checkUsernameExists } from "./queries";
 
 const formSchema = z.object({
   name: z.string().min(3),
