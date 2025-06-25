@@ -19,18 +19,6 @@ export default function AuthButtons() {
             Email
           </Link>
         </Button>
-        <Button variant={"outline"} className="w-full" asChild>
-          <Link to="/auth/social/github/start">
-            <GithubIcon className="w-4 h-4" />
-            Github
-          </Link>
-        </Button>
-        <Button variant={"outline"} className="w-full" asChild>
-          <Link to="/auth/otp/start">
-            <LockIcon className="w-4 h-4" />
-            OTP
-          </Link>
-        </Button>
       </div>
     </div>
   );
