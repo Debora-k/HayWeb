@@ -1,10 +1,15 @@
 import { Button } from "~/common/components/ui/button";
-import { Form, Link, useNavigation } from "react-router";
+import { Form, Link, redirect, useNavigation } from "react-router";
 import InputPair from "~/common/components/input-pair";
 import AuthButtons from "~/common/components/auth-button";
 import type { Route } from "./+types/login-page";
 import { z } from "zod";
 import { LoaderCircle } from "lucide-react";
+import { makeSSRClient } from "~/supa-client";
+
+export const meta: Route.MetaFunction = () => {
+  return [{ title: "Login | Hay" }];
+};
 
 const formSchema = z.object({
   email: z
@@ -32,6 +37,21 @@ export const action = async ({ request }: Route.ActionArgs) => {
       formErrors: error.flatten().fieldErrors,
     };
   }
+
+  const { email, password } = data;
+  const { client, headers } = makeSSRClient(request);
+  const { error: loginError } = await client.auth.signInWithPassword({
+    email,
+    password,
+  });
+
+  if (loginError) {
+    return {
+      loginError: loginError.message,
+      formErrors: null,
+    };
+  }
+  return redirect("/", { headers });
 };
 
 export default function LoginPage({ actionData }: Route.ComponentProps) {
